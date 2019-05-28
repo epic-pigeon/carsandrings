@@ -9,9 +9,13 @@ public class RearWheelDrive : MonoBehaviour {
 	public float maxTorque = 300;
 	public GameObject wheelShape;
 
+    private float direction;
+
 	// here we find all the WheelColliders down in the hierarchy
 	public void Start()
 	{
+        direction = 0f; //dima pidar
+
 		wheels = GetComponentsInChildren<WheelCollider>();
 
 		for (int i = 0; i < wheels.Length; ++i) 
@@ -40,17 +44,26 @@ public class RearWheelDrive : MonoBehaviour {
 		float angle = maxAngle * Input.GetAxis("Horizontal");
 		float torque = maxTorque * Input.GetAxis("Vertical");
 
-		foreach (WheelCollider wheel in wheels)
+        direction = torque > 0 ? 1 : torque == 0? direction : -1;
+
+        foreach (WheelCollider wheel in wheels)
 		{
+
 			// a simple car where front wheels steer while rear ones drive
 			if (wheel.transform.localPosition.z > 0)
 				wheel.steerAngle = angle;
 
-			if (wheel.transform.localPosition.z < 0)
-				wheel.motorTorque = torque;
+            if (wheel.transform.localPosition.z < 0)
+                wheel.motorTorque = torque;
 
-			// update visual wheels if any
-			if (wheelShape) 
+            //When didn't press W or S
+            if (torque == 0)
+            {
+                wheel.motorTorque = direction * (-300f);
+            }
+
+            // update visual wheels if any
+            if (wheelShape) 
 			{
 				Quaternion q;
 				Vector3 p;
