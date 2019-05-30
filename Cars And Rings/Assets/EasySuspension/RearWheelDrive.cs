@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+
 
 public class RearWheelDrive : MonoBehaviour {
 
@@ -56,10 +58,9 @@ public class RearWheelDrive : MonoBehaviour {
             if (wheel.transform.localPosition.z < 0)
                 wheel.motorTorque = torque;
 
-            //When didn't press W or S
-            if (torque == 0)
-            {
-                wheel.motorTorque = direction * (-300f);
+            if (torque == 0) {
+                wheel.motorTorque /= 100f;
+                Debug.Log(wheel.motorTorque);
             }
 
             // update visual wheels if any
