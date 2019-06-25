@@ -13,8 +13,26 @@ public class RearWheelDrive : MonoBehaviour {
 
     private float direction;
 
-	// here we find all the WheelColliders down in the hierarchy
-	public void Start()
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Coin")
+        {
+            Debug.Log("kar");
+            Destroy(other.gameObject);
+        }
+    }
+
+   /* void OnCollisionEnter(Collision otherObj)
+    {
+        if (otherObj.gameObject.tag == "Coin")
+        {
+            Debug.Log("kar");
+            Destroy(otherObj.gameObject, .0f);
+        }
+    }*/
+
+    // here we find all the WheelColliders down in the hierarchy
+    public void Start()
 	{
         direction = 0f; //dima pidar
 
@@ -43,7 +61,10 @@ public class RearWheelDrive : MonoBehaviour {
 	// this helps us to figure our which wheels are front ones and which are rear
 	public void Update()
 	{
-		float angle = maxAngle * Input.GetAxis("Horizontal");
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            this.transform.position += new Vector3(0 , 100f, 0);
+        }
+        float angle = maxAngle * Input.GetAxis("Horizontal");
 		float torque = maxTorque * Input.GetAxis("Vertical");
 
         direction = torque > 0 ? 1 : torque == 0? direction : -1;
